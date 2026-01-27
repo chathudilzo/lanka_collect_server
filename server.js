@@ -12,6 +12,10 @@ connectDB();
 
 app.use("/api/users", require("./src/routes/userRoutes"));
 
+app.use("/api/customers", require("./src/routes/customerRoutes"));
+
+app.use("/api/loans", require("./src/routes/loanRoutes"));
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
