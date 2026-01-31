@@ -4,7 +4,7 @@ const installmentSchema = new mongoose.Schema({
   installmentNo: { type: Number, required: true },
   dueDate: { type: Date, required: true },
   amountDue: { type: Number, required: true },
-  panalty: { type: Number, default: 0 },
+  penalty: { type: Number, default: 0 },
   paidAmount: { type: Number, default: 0 },
   status: {
     type: String,
@@ -26,14 +26,14 @@ const loanSchema = new mongoose.Schema(
 
     principalAmount: { type: Number, required: true },
     totalInterest: { type: Number, required: true },
-    totalPayble: { type: Number, required: true },
+    totalPayable: { type: Number, required: true },
 
     repaymentType: {
       type: String,
       enum: ["weekly", "monthly"],
       default: "weekly",
     },
-    panaltyRate: { type: Number, required: true },
+    penaltyRate: { type: Number, required: true },
 
     status: {
       type: String,

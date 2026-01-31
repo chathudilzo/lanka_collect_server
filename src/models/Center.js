@@ -17,7 +17,7 @@ const centerSchema = new mongoose.Schema(
         "Tuesday",
         "Wednesday",
         "Thursday",
-        "Fryday",
+        "Friday",
         "Saturday",
         "Sunday",
       ],

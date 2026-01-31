@@ -18,6 +18,7 @@ app.use("/api/loans", require("./src/routes/loanRoutes"));
 
 app.use("/api/collect", require("./src/routes/receiptRoutes"));
 app.use("/api/org", require("./src/routes/orgRoutes"));
+app.use("/api/dashboard", require("./src/routes/dashBoardRouts"));
 
 const PORT = process.env.PORT || 3000;
 

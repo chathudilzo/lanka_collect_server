@@ -3,13 +3,13 @@ const loanService = require("../services/loanService");
 
 exports.createLoan = async (req, res) => {
   try {
-    const { principalAmount, duration, repaymentType, panaltyRate } = req.body;
+    const { principalAmount, duration, repaymentType, penaltyRate } = req.body;
 
     const totalInterest = principalAmount * 0.1;
-    const totalPayble = principalAmount + totalInterest;
+    const totalPayable = principalAmount + totalInterest;
 
     const schedule = loanService.generateSchedule(
-      totalPayble,
+      totalPayable,
       duration,
       repaymentType,
       new Date(),
@@ -18,7 +18,7 @@ exports.createLoan = async (req, res) => {
     const loan = await Loan.create({
       ...req.body,
       totalInterest,
-      totalPayble,
+      totalPayable,
       schedule,
       branchId: req.user.branchId,
       status: "pending",

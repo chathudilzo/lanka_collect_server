@@ -1,6 +1,16 @@
 const authService = require("../services/auth_service");
 const User = require("../models/User");
 
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ message: "USer not found!" });
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
