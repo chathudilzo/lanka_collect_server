@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./src/config/db");
-
+const path = require("path");
 const app = express();
 
 app.use(cors());
@@ -19,6 +19,11 @@ app.use("/api/loans", require("./src/routes/loanRoutes"));
 app.use("/api/collect", require("./src/routes/receiptRoutes"));
 app.use("/api/org", require("./src/routes/orgRoutes"));
 app.use("/api/dashboard", require("./src/routes/dashBoardRouts"));
+
+app.use("/api/collection", require("./src/routes/collectionRoutes"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use("/api/application", require("./src/routes/applicationRoutes"));
 
 const PORT = process.env.PORT || 3000;
 

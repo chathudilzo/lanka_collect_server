@@ -18,11 +18,19 @@ const receiptSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    branchId: {
+      type: String,
+      required: true,
+    },
 
     amountPaid: { type: Number, required: true },
     panaltyPaid: { type: Number, default: 0 },
     totalReceived: { type: Number, required: true },
-
+    handoverId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CollectionHandover",
+      default: null,
+    },
     paymentMethod: {
       type: String,
       enum: ["Cash", "Cheque", "Bank Transfer"],

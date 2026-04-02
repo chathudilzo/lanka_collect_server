@@ -8,7 +8,10 @@ const customerSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     address: { type: String, required: true },
     gender: { type: String, enum: ["Male", "Female", "Other"] },
-
+    location: {
+      latitude: { type: Number },
+      longitude: { type: Number },
+    },
     branchId: { type: String, required: true },
     centerId: { type: String, required: true },
     totalLoansTaken: { type: Number, default: 0 },
