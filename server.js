@@ -24,6 +24,7 @@ app.use("/api/collection", require("./src/routes/collectionRoutes"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/application", require("./src/routes/applicationRoutes"));
+app.use("/api/team", require("./src/routes/teamRoutes"));
 
 const PORT = process.env.PORT || 3000;
 

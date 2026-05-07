@@ -1,6 +1,6 @@
 const Customer = require("../models/Customer");
 const Loan = require("../models/Loan");
-
+const Receipt = require("../models/Receipt");
 exports.getCustomerByNIC = async (req, res) => {
   try {
     const customer = await Customer.findOne({ nic: req.params.nic });
@@ -104,6 +104,84 @@ exports.checkCustomerStatus = async (req, res) => {
     });
   } catch (error) {
     console.error("Check Status Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+exports.getBranchCustomers = async (req, res) => {
+  try {
+    const branchId = req.user.branchId;
+    const { search, tab, centerId } = req.query;
+
+    let query = { branchId: branchId };
+    if (centerId) query.centerId = centerId;
+    if (tab === "active") {
+      query.activeLoanId = { $ne: null };
+      query.creditStatus = { $ne: "BlackListed" };
+    } else if (tab === "inactive") {
+      query.activeLoanId = null;
+      query.creditStatus = { $ne: "BlackListed" };
+    } else if (tab === "blacklisted") {
+      query.creditStatus = "BlackListed";
+    }
+
+    if (search) {
+      query.$or = [
+        { fullName: { $regex: search, $options: "i" } },
+        { nic: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const customers = await Customer.find(query)
+      .populate({
+        path: "activeLoanId",
+        select: "loanId totalPayable schedule centerId",
+      })
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, count: customers.length, data: customers });
+  } catch (error) {
+    console.error("Branch Customers Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getCustomer360 = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const customer = await Customer.findById(id).populate("activeLoanId");
+
+    if (!customer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Customer not found" });
+    }
+
+    const pastLoans = await Loan.find({
+      customerId: id,
+      _id: { $ne: customer.activeLoanId?._id },
+    }).sort({ createdAt: -1 });
+
+    const recentReceipts = await Receipt.find({
+      customerId: id,
+      status: "valid",
+    })
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate("collectorId", "name");
+
+    res.json({
+      success: true,
+      data: {
+        profile: customer,
+        activeLoan: customer.activeLoanId || null,
+        pastLoans: pastLoans,
+        recentReceipts: recentReceipts,
+      },
+    });
+  } catch (error) {
+    console.error("Customer 360 Error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

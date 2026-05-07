@@ -40,6 +40,7 @@ const loanSchema = new mongoose.Schema(
       enum: ["pending", "approved", "disbursed", "closed", "rejected"],
       default: "pending",
     },
+    disbursedAt: { type: Date },
     approvedBy: { type: mongoose.Schema.ObjectId, ref: "User" },
     centerId: { type: String, required: true },
     branchId: { type: String, required: true },

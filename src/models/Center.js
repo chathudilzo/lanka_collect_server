@@ -5,8 +5,7 @@ const centerSchema = new mongoose.Schema(
     centerId: { type: String, required: true, unique: true },
     centerName: { type: String, required: true },
     branchId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Branch",
+      type: String,
       required: true,
     },
     routeId: { type: String, required: true },
